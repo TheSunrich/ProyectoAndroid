@@ -14,7 +14,7 @@ interface NoteApiService {
     suspend fun getAllNotes(): List<Note>
 
     @GET("notes/{id}")
-    suspend fun getNoteById(id: Int): Note
+    suspend fun getNoteById(id: String): Note
 
     @POST("notes")
     suspend fun createNote(note: Note): Note

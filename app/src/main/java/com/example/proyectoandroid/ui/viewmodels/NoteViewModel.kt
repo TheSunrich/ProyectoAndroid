@@ -11,11 +11,11 @@ import kotlinx.coroutines.launch
 
 sealed class NoteUiState {
     data object Loading : NoteUiState()
-    data class Success(val countries: List<Note>) : NoteUiState()
+    data class Success(val notes: List<Note>) : NoteUiState()
     data class Error(val message: String) : NoteUiState()
 }
 
-class CountryViewModel(private val repository: NoteRepository = NoteRepository()) :
+class NoteViewModel(private val repository: NoteRepository = NoteRepository()) :
     ViewModel() {
     private var _uiState = MutableStateFlow<NoteUiState>(NoteUiState.Loading)
     val uiState: StateFlow<NoteUiState> = _uiState
@@ -35,6 +35,19 @@ class CountryViewModel(private val repository: NoteRepository = NoteRepository()
                 _uiState.value = NoteUiState.Error("An error occurred")
             }
         }
+    }
+
+    fun getNoteById(id: String): Note? {
+        var note: Note? = null
+        viewModelScope.launch {
+            try {
+                note = repository.getNoteById(id)
+            } catch (e: Exception) {
+                _uiState.value = NoteUiState.Error("An error occurred")
+            }
+
+        }
+        return note
     }
 
     fun createNote(note: Note) {

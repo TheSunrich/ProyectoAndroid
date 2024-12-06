@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ProyectoAndroid</string>
+    <string name="app_name">Proyecto Android</string>
+    <string name="notes">Notas</string>
 </resources>
