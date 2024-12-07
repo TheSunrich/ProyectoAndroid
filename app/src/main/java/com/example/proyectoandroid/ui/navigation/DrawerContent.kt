@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.proyectoandroid.R
 
 @Composable
 fun DrawerContent(navController: NavHostController, onCloseDrawer: () -> Unit) {
@@ -36,16 +38,12 @@ fun DrawerContent(navController: NavHostController, onCloseDrawer: () -> Unit) {
                 textAlign = TextAlign.Left
             )
             HorizontalDivider()
-            DrawerItem(text = "Home", icon = Icons.Default.Home){
-                navController.navigate("home")
+            DrawerItem(text = stringResource(R.string.notes), icon = Icons.Default.Email){
+                navController.navigate("notes")
                 onCloseDrawer()
             }
-            DrawerItem(text = "Profile", icon = Icons.Default.AccountCircle, onClick = {
+            DrawerItem(text = "Status", icon = Icons.Default.Done, onClick = {
                 navController.navigate("profile")
-                onCloseDrawer()
-            })
-            DrawerItem(text = "Settings", icon = Icons.Default.Settings, onClick = {
-                navController.navigate("settings")
                 onCloseDrawer()
             })
 

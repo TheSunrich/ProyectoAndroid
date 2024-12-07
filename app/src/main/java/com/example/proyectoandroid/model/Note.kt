@@ -1,10 +1,12 @@
 package com.example.proyectoandroid.model
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
 import java.util.UUID
 
 data class Note (
-    val id: UUID,
+    @SerializedName("_id")
+    val id: String,
     val title: String,
     val content: String,
     val initDate: Date,
@@ -17,5 +19,6 @@ data class Note (
 data class Status (
     val name: String,
     val description: String,
+    val color: String = "#FFFFFF",
     val isActive: Boolean
 )

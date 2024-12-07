@@ -1,5 +1,6 @@
 package com.example.proyectoandroid.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,15 +42,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.proyectoandroid.model.Note
 import com.example.proyectoandroid.model.Status
+import com.example.proyectoandroid.ui.components.Tag
 import com.example.proyectoandroid.ui.viewmodels.NoteUiState
 import com.example.proyectoandroid.ui.viewmodels.NoteViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 
 @Composable
-fun NoteListScreen(noteViewModel: NoteViewModel = viewModel(), navController: NavController, onNoteClick: (String) -> Unit) {
+fun NoteListScreen(
+    noteViewModel: NoteViewModel = viewModel(),
+    navController: NavController,
+    onNoteClick: (String) -> Unit
+) {
     val uiState by noteViewModel.uiState.collectAsState()
 
     Scaffold(
@@ -106,13 +111,13 @@ fun NoteListScreen(noteViewModel: NoteViewModel = viewModel(), navController: Na
 @Composable
 fun NoteItem(
     note: Note = Note(
-        id = UUID.randomUUID(),
+        id = "1",
         title = "Title",
         content = "Content",
         initDate = Date(),
         endDate = Date(),
         tags = listOf("tag1", "tag2"),
-        status = Status("status name", "description", true)
+        status = Status("status name", "description", "#FFFFFF", true)
     ),
     onNoteClick: (String) -> Unit = {}
 ) {
@@ -122,7 +127,7 @@ fun NoteItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(6.dp)
-            .clickable(onClick = { onNoteClick(note.id.toString()) })
+            .clickable(onClick = { onNoteClick(note.id) })
     ) {
         Row(
             modifier = Modifier
@@ -132,19 +137,12 @@ fun NoteItem(
                 Text(text = note.title, style = TextStyle(fontSize = 20.sp))
             }
             Column {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(1000.dp))
-                        .background(Color.Red)
-                        .padding(horizontal = 10.dp, vertical = 3.dp)
-                ) {
-                    Text(
-                        text = note.status.name,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
+                Tag(
+                    text = note.status.name,
+                    color = Color(
+                        android.graphics.Color.parseColor(note.status.color)
                     )
-                }
+                )
             }
         }
         Row(
@@ -172,19 +170,7 @@ fun NoteItem(
             horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         ) {
             for (tag in note.tags!!) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(1000.dp))
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 3.dp)
-                ) {
-                    Text(
-                        text = tag,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                Tag(text = tag)
             }
         }
     }

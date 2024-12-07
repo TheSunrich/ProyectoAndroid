@@ -15,8 +15,7 @@ sealed class NoteUiState {
     data class Error(val message: String) : NoteUiState()
 }
 
-class NoteViewModel(private val repository: NoteRepository = NoteRepository()) :
-    ViewModel() {
+class NoteViewModel(private val repository: NoteRepository = NoteRepository()) : ViewModel() {
     private var _uiState = MutableStateFlow<NoteUiState>(NoteUiState.Loading)
     val uiState: StateFlow<NoteUiState> = _uiState
 
@@ -36,63 +35,4 @@ class NoteViewModel(private val repository: NoteRepository = NoteRepository()) :
             }
         }
     }
-
-    fun getNoteById(id: String): Note? {
-        var note: Note? = null
-        viewModelScope.launch {
-            try {
-                note = repository.getNoteById(id)
-            } catch (e: Exception) {
-                _uiState.value = NoteUiState.Error("An error occurred")
-            }
-
-        }
-        return note
-    }
-
-    fun createNote(note: Note) {
-        viewModelScope.launch {
-            try {
-                repository.createNote(note)
-                fetchNotes()
-            } catch (e: Exception) {
-                _uiState.value = NoteUiState.Error("An error occurred")
-            }
-        }
-    }
-
-    fun updateNoteById(id: Int, note: Note) {
-        viewModelScope.launch {
-            try {
-                repository.updateNoteById(id, note)
-                fetchNotes()
-            } catch (e: Exception) {
-                _uiState.value = NoteUiState.Error("An error occurred")
-            }
-        }
-    }
-
-    fun changeStatus(id: Int, status: Status) {
-        viewModelScope.launch {
-            try {
-                repository.changeStatus(id, status)
-                fetchNotes()
-            } catch (e: Exception) {
-                _uiState.value = NoteUiState.Error("An error occurred")
-            }
-        }
-    }
-
-    fun deleteNoteById(id: Int) {
-        viewModelScope.launch {
-            try {
-                repository.deleteNoteById(id)
-                fetchNotes()
-            } catch (e: Exception) {
-                _uiState.value = NoteUiState.Error("An error occurred")
-            }
-        }
-    }
-
-
 }

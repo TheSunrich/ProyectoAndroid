@@ -19,15 +19,15 @@ class NoteRepository {
         return api.createNote(note)
     }
 
-    suspend fun updateNoteById(id: Int, note: Note): Note {
+    suspend fun updateNoteById(id: String, note: Note): Note {
         return api.updateNoteById(id, note)
     }
 
-    suspend fun changeStatus(id: Int, status: Status): Note {
+    suspend fun changeStatus(id: String, status: Status): Note {
         return api.changeStatus(id, status)
     }
 
-    suspend fun deleteNoteById(id: Int) {
+    suspend fun deleteNoteById(id: String) {
         return api.deleteNoteById(id)
     }
 }
