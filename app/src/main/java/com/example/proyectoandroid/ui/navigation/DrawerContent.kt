@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.proyectoandroid.R
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun DrawerContent(navController: NavHostController, onCloseDrawer: () -> Unit) {
@@ -30,7 +32,7 @@ fun DrawerContent(navController: NavHostController, onCloseDrawer: () -> Unit) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Proyecto Android",
+                text = stringResource(R.string.app_name),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -39,11 +41,19 @@ fun DrawerContent(navController: NavHostController, onCloseDrawer: () -> Unit) {
             )
             HorizontalDivider()
             DrawerItem(text = stringResource(R.string.notes), icon = Icons.Default.Email){
-                navController.navigate("notes")
+                navController.navigate("notes"){
+                    popUpTo("notes"){
+                        inclusive = true
+                    }
+                }
                 onCloseDrawer()
             }
-            DrawerItem(text = "Status", icon = Icons.Default.Done, onClick = {
-                navController.navigate("profile")
+            DrawerItem(text = stringResource(R.string.status), icon = Icons.Default.Done, onClick = {
+                navController.navigate("status"){
+                    popUpTo("status"){
+                        inclusive = true
+                    }
+                }
                 onCloseDrawer()
             })
 
@@ -52,11 +62,12 @@ fun DrawerContent(navController: NavHostController, onCloseDrawer: () -> Unit) {
 
 }
 
+@Preview
 @Composable
 fun DrawerItem(
-    text: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    onClick: () -> Unit
+    text: String = stringResource(R.string.notes),
+    icon: ImageVector = Icons.Default.Email,
+    onClick: () -> Unit = {}
 ) {
 
     Row(
@@ -69,11 +80,12 @@ fun DrawerItem(
         Icon(
             icon,
             contentDescription = null,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(24.dp)
         )
+        Spacer(modifier = Modifier.width(16.dp))
         Text(
             text,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
         )
     }
 

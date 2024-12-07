@@ -1,33 +1,66 @@
 package com.example.proyectoandroid.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectoandroid.R
 import com.example.proyectoandroid.model.Note
+import com.example.proyectoandroid.model.Status
 import com.example.proyectoandroid.ui.components.Tag
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+
+
+@Preview(showBackground = true)
+@Composable
+fun NoteDetailScreenPreview() {
+    NoteDetailScreen(
+        note = Note(
+            id = "1",
+            title = "Título de la nota",
+            content = "Contenido de la nota",
+            initDate = Date(),
+            endDate = Date(),
+            tags = listOf("tag1", "tag2"),
+            status = Status("Estado", "Descripción", "#FF0000", true)
+        ),
+        onDelete = {},
+        onBack = {}
+    )
+}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
+fun NoteDetailScreen(note: Note, onDelete: (String) -> Unit, onBack: () -> Unit) {
 
     val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
     Column(
@@ -53,7 +86,7 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                     Text(
-                        text = "Título: ${note.title}",
+                        text = "${stringResource(R.string.title)}: ${note.title}",
                         style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     )
                 }
@@ -69,7 +102,7 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Fecha de Inicio:",
+                        text = "${stringResource(R.string.init_date)}:",
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     )
                     Text(
@@ -82,7 +115,7 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Fecha de Fin",
+                        text = "${stringResource(R.string.end_date)}:",
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     )
                     Text(
@@ -95,7 +128,7 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Descripción de la nota:",
+                text = stringResource(R.string.description),
                 style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
             )
             Text(text = note.content, style = TextStyle(fontSize = 16.sp))
@@ -103,7 +136,7 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "Etiquetas:",
+                text = stringResource(R.string.tags_simple),
                 style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
             )
             FlowRow(
@@ -116,7 +149,7 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
             }
 
             Text(
-                text = "Estado:",
+                text = stringResource(R.string.status),
                 style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
             )
 
@@ -131,23 +164,12 @@ fun NoteDetailScreen(note: Note, onBack: () -> Unit) {
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Blue,
-                    contentColor = Color.White
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Create,
-                    contentDescription = "Update",
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = {},
+                onClick = {
+                    onDelete(note.id!!)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Red,
                     contentColor = Color.White

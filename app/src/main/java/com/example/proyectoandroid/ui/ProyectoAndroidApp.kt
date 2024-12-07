@@ -1,5 +1,7 @@
 package com.example.proyectoandroid.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -20,12 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.proyectoandroid.BuildConfig
 import com.example.proyectoandroid.R
 import com.example.proyectoandroid.ui.navigation.DrawerContent
 import com.example.proyectoandroid.ui.navigation.Navigation
 import kotlinx.coroutines.launch
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProyectoAndroidApp() {
@@ -48,7 +51,7 @@ fun ProyectoAndroidApp() {
                     TopAppBar(
                         title = {
                             Text(
-                                text = navController.currentDestination?.route ?: stringResource(R.string.notes),
+                                text = stringResource(R.string.app_name) + " - " + if (BuildConfig.FLAVOR.equals("prod")) "Prod" else "Dev",
                                 color = Color.White,
                                 fontSize = 20.sp,
                             )
@@ -59,7 +62,11 @@ fun ProyectoAndroidApp() {
                                     drawerState.open()
                                 }
                             }) {
-                                Icon(Icons.Default.Menu, contentDescription = "Menu",tint = Color.White)
+                                Icon(
+                                    Icons.Default.Menu,
+                                    contentDescription = "Menu",
+                                    tint = Color.White
+                                )
                             }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(
@@ -68,7 +75,10 @@ fun ProyectoAndroidApp() {
                     )
                 }
             ) { paddingValues ->
-                Navigation(navController = navController, modifier = Modifier.padding(paddingValues))
+                Navigation(
+                    navController = navController,
+                    modifier = Modifier.padding(paddingValues)
+                )
             }
         }
     )
